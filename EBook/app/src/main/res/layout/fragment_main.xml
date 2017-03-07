@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.example.qsk.ebook.view.MainViewPager
+        android:id="@+id/vp_main_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </com.example.qsk.ebook.view.MainViewPager>
+
+    <RadioGroup
+        android:id="@+id/rg_main"
+        android:orientation="horizontal"
+        android:background="#a888"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/rb_main1"
+            android:text="发现"
+            android:button="@null"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/back_left"
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/rb_main2"
+            android:text="书柜"
+            android:button="@null"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/back_left"
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/rb_main3"
+            android:text="我的"
+            android:button="@null"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/back_left"
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+     </RadioGroup>
+</LinearLayout>
