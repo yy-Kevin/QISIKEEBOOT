@@ -36,7 +36,6 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         initView();
         initData();
-
         TextWatcher textWatcher = new TextWatcher() {
 
             @Override
@@ -63,6 +62,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
     }
+    //初始化 搜索界面
     public void initView(){
         mInflater = LayoutInflater.from(this);
         mFlowLayout = (FlowLayout) findViewById(R.id.id_flowlayout);

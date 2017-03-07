@@ -1,17 +1,21 @@
 package com.example.qsk.ebook.bookview;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.qsk.ebook.BookAcitvity;
 import com.example.qsk.ebook.R;
+import com.example.qsk.ebook.SearchActivity;
 import com.example.qsk.ebook.bean.Books;
 import com.example.qsk.ebook.foundviewpager.FoundcontentViewpager;
 import com.panxw.android.imageindicator.AutoPlayManager;
@@ -92,7 +96,14 @@ public class FoundPager extends BaseBookPager {
 
         lv_found.setAdapter(new FoundListViewAdapter());
 
-
+        lv_found.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(TAG,"listView的第" + position + "个条目被点击了" );
+                Intent intent = new Intent(mActivity, BookAcitvity.class);
+                mActivity.startActivity(intent);
+            }
+        });
 
     }
 
