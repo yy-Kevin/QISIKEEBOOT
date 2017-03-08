@@ -2,6 +2,8 @@ package com.example.qsk.ebook;
 
 
 import android.content.Intent;
+import android.os.Message;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,8 +19,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.qsk.ebook.bookview.FoundPager;
+import com.example.qsk.ebook.foundviewpager.FirstFound;
 import com.example.qsk.ebook.fragment.LeftFragMent;
 import com.example.qsk.ebook.fragment.MainFragMent;
+import com.example.qsk.ebook.hander.ImageHandler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
     private MainFragMent fragmentMain;
     private LeftFragMent fragMentLeft;
     private TextView tv_title;
+    public static ImageHandler handler;
+    public static FirstFound firstFound;
+    private MainFragMent mainFragMent;
+    private FoundPager foundPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +58,46 @@ public class MainActivity extends AppCompatActivity {
         //使用Fragment布局，替换之前的
         initFragment();
 
+
     }
 
+    public void ititHander(){
+        handler = new ImageHandler(this);
+        mainFragMent = (MainFragMent) getSupportFragmentManager().findFragmentByTag("MAIN_FRAGMENT");
+        foundPager = (FoundPager) mainFragMent.mPagers.get(0);
+        firstFound = (FirstFound) foundPager.im.get(0);
+
+        firstFound.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                handler.sendMessage(Message.obtain(handler, ImageHandler.MSG_PAGE_CHANGED, position, 0));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                switch (state) {
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                        handler.sendEmptyMessage(ImageHandler.MSG_KEEP_SILENT);
+                        break;
+                    case ViewPager.SCROLL_STATE_IDLE:
+                        handler.sendEmptyMessageDelayed(ImageHandler.MSG_UPDATE_IMAGE, ImageHandler.MSG_DELAY);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        });
+
+        firstFound.viewPager.setCurrentItem(Integer.MAX_VALUE / 2);//默认在中间，使用户看不到边界
+        //开始轮播效果
+        handler.sendEmptyMessageDelayed(ImageHandler.MSG_UPDATE_IMAGE, ImageHandler.MSG_DELAY);
+    }
     private void initView(){
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
         left = (RelativeLayout) findViewById(R.id.left);
@@ -77,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
         fragMentLeft = new LeftFragMent();
 
         //将主页面的布局替换成 Fragment布局
-        getSupportFragmentManager().beginTransaction().replace(R.id.main, fragmentMain).commit();
-        getSupportFragmentManager().beginTransaction().replace(R.id.left, fragMentLeft).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main, fragmentMain,"MAIN_FRAGMENT").commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.left, fragMentLeft,"LeftFragment").commit();
     }
 
     //初始化 Toolbar的菜单布局
@@ -102,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case 16908332:
-
                 mDrawerLayout.openDrawer(Gravity.LEFT);
                 return true;
         }

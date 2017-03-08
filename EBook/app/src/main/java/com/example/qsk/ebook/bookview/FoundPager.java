@@ -17,11 +17,28 @@ import com.example.qsk.ebook.BookAcitvity;
 import com.example.qsk.ebook.R;
 import com.example.qsk.ebook.SearchActivity;
 import com.example.qsk.ebook.bean.Books;
+import com.example.qsk.ebook.bean.BooksJson;
+import com.example.qsk.ebook.foundviewpager.FirstFound;
 import com.example.qsk.ebook.foundviewpager.FoundcontentViewpager;
+import com.example.qsk.ebook.foundviewpager.ThreeFound;
+import com.example.qsk.ebook.foundviewpager.TwoFound;
+import com.example.qsk.ebook.gloable.NetUrlGloadle;
+import com.google.gson.Gson;
 import com.panxw.android.imageindicator.AutoPlayManager;
 import com.panxw.android.imageindicator.ImageIndicatorView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Cache;
+import okhttp3.CacheControl;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by qsk on 2017/3/6.
@@ -32,11 +49,14 @@ import java.util.ArrayList;
 public class FoundPager extends BaseBookPager {
 
     private static final String TAG = "FoundPager";
-    private ListView lv_found;
+    public ViewPager lv_found;
     private ArrayList<Books> books;
-    private ArrayList<FoundcontentViewpager> im;
+    private FoundcontentViewpager foundcontentViewpager;
+
     private View indicate_view;
     private ImageIndicatorView viewpager;
+    public ArrayList<FoundcontentViewpager> im;
+    private ArrayList<BooksJson.DataBean> dataList;
 
     public FoundPager(Activity activity) {
         super(activity);
@@ -45,69 +65,69 @@ public class FoundPager extends BaseBookPager {
     @Override
     public View initView() {
         View view = View.inflate(mActivity, R.layout.viewpager_found,null);
-        lv_found = (ListView) view.findViewById(R.id.lv_found);
-
-        indicate_view = View.inflate(mActivity, R.layout.list_found_itme_head,null);
-        viewpager = (ImageIndicatorView) indicate_view.findViewById(R.id.vp_found);
-        local();
-//        im = new ArrayList();
-//        im.add(new FoundcontentViewpager(mActivity));
-//        im.add(new FoundcontentViewpager(mActivity));
-//        im.add(new FoundcontentViewpager(mActivity));
-//        im.add(new FoundcontentViewpager(mActivity));
-//        viewpager.setAdapter(new FoundViewPagerAdapter());
-        lv_found.addHeaderView(indicate_view);
-
+        lv_found = (ViewPager) view.findViewById(R.id.vp_found);
         return view;
     }
 
-    //系统本地图片加载
-         public void local() {
-                 // 声明一个数组, 指定图片的ID
-                 final Integer[] resArray = new Integer[] {R.drawable.back_left, R.drawable.back_left,
-                         R.drawable.back_left, R.drawable.back_left};
-                 // 把数组交给图片展播组件
-                 viewpager.setupLayoutByDrawable(resArray);
-
-//                    viewpager.;
-                 // 展播的风格
-         //        indicate_view.setIndicateStyle(ImageIndicatorView.INDICATE_ARROW_ROUND_STYLE);
-                 viewpager.setIndicateStyle(ImageIndicatorView.INDICATE_USERGUIDE_STYLE);
-                 // 显示组件
-                 viewpager.show();
-                 final AutoPlayManager autoBrocastManager = new AutoPlayManager(viewpager);
-                 //设置开启自动广播
-                 autoBrocastManager.setBroadcastEnable(true);
-                 //autoBrocastManager.setBroadCastTimes(5);//loop times
-                 //设置开始时间和间隔时间
-                 autoBrocastManager.setBroadcastTimeIntevel(3000, 3000);
-                 //设置循环播放
-                 autoBrocastManager.loop();
-             }
 
     @Override
     public void initData() {
+        initInternet();
         Log.i(TAG,"发现--页面开始加载数据了");
-        books = new ArrayList();
-        books.add(new Books("adb1" , "adbcdfa1" ,"adfasdffasdfasdfsdfdf as 1"));
-        books.add(new Books("adb2" , "adbcdfa2" ,"adfasdffasdfasdfsdfdf as 2"));
-        books.add(new Books("adb3" , "adbcdfa3" ,"adfasdffasdfasdfsdfdf as 3"));
-        books.add(new Books("adb4" , "adbcdfa4" ,"adfasdffasdfasdfsdfdf as 4"));
-
-        lv_found.setAdapter(new FoundListViewAdapter());
-
-        lv_found.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i(TAG,"listView的第" + position + "个条目被点击了" );
-                Intent intent = new Intent(mActivity, BookAcitvity.class);
-                mActivity.startActivity(intent);
-            }
-        });
+        im = new ArrayList();
+        im.add(new FirstFound(mActivity,dataList));
+        im.add(new TwoFound(mActivity,dataList));
+        im.add(new ThreeFound(mActivity,dataList));
+        lv_found.setAdapter(new FoundViewPagerAdapter());
 
     }
 
+    public void initInternet(){
+        Log.i(TAG,"yuyao initIntenet " + "开始请求网络了 。。。。。。。。");
+        File httpCacheDirectory = new File(mActivity.getExternalCacheDir(), "responses");
+        Cache cache = new Cache(httpCacheDirectory, 10 * 1024 * 1024);
+
+        OkHttpClient client = new OkHttpClient.Builder().cache(cache).build();
+
+        //使用Okhttp请求网络
+        Request request = new Request.Builder()
+                .cacheControl(CacheControl.FORCE_CACHE)
+                .cacheControl(new CacheControl.Builder().maxAge(0, TimeUnit.SECONDS).build())
+                .url(NetUrlGloadle.NET_URL)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i(TAG,"yuyao onFailure " + "请求网络失败了");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String books = response.body().string();
+                Log.i(TAG,"yuyao onResponse 请求网络成功 1111=" + books);
+                GsonForNet(books);
+            }
+        });
+    }
+
+    private void GsonForNet(String date){
+        Gson gson = new Gson();
+        BooksJson booksjson = gson.fromJson(date, BooksJson.class);
+         dataList = (ArrayList<BooksJson.DataBean>) booksjson.getData();
+        for (BooksJson.DataBean book: booksjson.getData()){
+            Log.i(TAG,"book.getAuthor() = " + book.getAuthor());
+            Log.i(TAG,"book.getTitle_en = " + book.getTitle_en());
+            Log.i(TAG,"book.getTitle_zh(); = " + book.getTitle_zh());
+            book.getAuthor();
+            book.getTitle_en();
+            book.getTitle_zh();
+        }
+    }
+
     private class FoundViewPagerAdapter extends PagerAdapter{
+
 
         @Override
         public int getCount() {
@@ -121,13 +141,12 @@ public class FoundPager extends BaseBookPager {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            FoundcontentViewpager foundcontentViewpager = im.get(position);
-            ImageView mRootView = foundcontentViewpager.mRootView;
+            FoundcontentViewpager foundcontentViewpager =  im.get(position);
+            View mRootView = foundcontentViewpager.mRootView;
+            foundcontentViewpager.intiData();
             container.addView(mRootView);
-
             return mRootView;
         }
-
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
@@ -135,51 +154,4 @@ public class FoundPager extends BaseBookPager {
         }
     }
 
-    private class FoundListViewAdapter extends BaseAdapter{
-
-        @Override
-        public int getCount() {
-            return books.size();
-        }
-
-        @Override
-        public Books getItem(int position) {
-            return books.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = null;
-            BookHolder holder = null;
-            if (view == null){
-                view = View.inflate(mActivity,R.layout.listview_found_item,null);
-                holder = new BookHolder();
-                view.setTag(holder);
-            }else {
-                holder = (BookHolder) view.getTag();
-                view = convertView;
-            }
-
-            holder.title = (TextView) view.findViewById(R.id.tv_title);
-            holder.author = (TextView) view.findViewById(R.id.tv_author);
-            holder.content = (TextView) view.findViewById(R.id.tv_content);
-
-            holder.title.setText(books.get(position).getTitle());
-            holder.author.setText(books.get(position).getAuthor());
-            holder.content.setText(books.get(position).getContent());
-
-            return view;
-        }
-
-        private class BookHolder{
-            TextView author;
-            TextView title;
-            TextView content;
-        }
-    }
 }

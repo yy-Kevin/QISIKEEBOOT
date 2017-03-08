@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 
 import com.example.qsk.ebook.R;
@@ -44,14 +45,20 @@ public class MainFragMent extends BaseFragment {
     public static final  String TAG = "MainFragMent";
 
     private MainViewPager viewPager;
-    private ArrayList<BaseBookPager> mPagers;
+    public ArrayList<BaseBookPager> mPagers;
     private RadioGroup rg_main;
     private RadioButton rb_main1;
+    private TextView tv_hot;
+    private TextView tv_new;
+    private TextView tv_haha;
 
     @Override
     public View initView() {
         View view = View.inflate(mActivity,R.layout.fragment_main,null);
         viewPager = (MainViewPager) view.findViewById(R.id.vp_main_viewpager);
+        tv_hot = (TextView) view.findViewById(R.id.tv_hot);
+        tv_new = (TextView) view.findViewById(R.id.tv_new);
+        tv_haha = (TextView) view.findViewById(R.id.tv_haha);
         rg_main = (RadioGroup) view.findViewById(R.id.rg_main);
         rb_main1 = (RadioButton) view.findViewById(R.id.rb_main1);
         return view;
@@ -61,7 +68,7 @@ public class MainFragMent extends BaseFragment {
     public void initData() {
 
         //开始请求网络了
-        initInternet();
+//        initInternet();
 
         //初始化Viewpager的三个页面
         mPagers = new ArrayList<>();
@@ -99,7 +106,28 @@ public class MainFragMent extends BaseFragment {
         Log.i(TAG,"yuyao " + "初始化几次");
 //        mPagers.get(0).initData();
 
-
+        // 设置最新 火热 最近浏览记录的点击事件
+        tv_hot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FoundPager foundPager = (FoundPager) mPagers.get(0);
+                foundPager.lv_found.setCurrentItem(0);
+            }
+        });
+        tv_new.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FoundPager foundPager = (FoundPager) mPagers.get(0);
+                foundPager.lv_found.setCurrentItem(1);
+            }
+        });
+        tv_haha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FoundPager foundPager = (FoundPager) mPagers.get(0);
+                foundPager.lv_found.setCurrentItem(2);
+            }
+        });
 
     }
 
@@ -132,6 +160,7 @@ public class MainFragMent extends BaseFragment {
         });
     }
 
+    // 主页面的adapter，发现，书柜，我的。
     public class MainAdapter extends PagerAdapter{
 
         @Override

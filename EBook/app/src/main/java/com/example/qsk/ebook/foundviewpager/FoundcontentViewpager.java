@@ -5,24 +5,24 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.qsk.ebook.R;
+import com.example.qsk.ebook.bean.BooksJson;
+
+import java.util.ArrayList;
 
 /**
  * Created by qsk on 2017/3/6.
  */
 
-public class FoundcontentViewpager {
+public abstract class FoundcontentViewpager {
 
-    private Activity mActivity;
-    public ImageView mRootView;
+    public Activity mActivity;
+    public View mRootView;
 
-    public FoundcontentViewpager(Activity activity){
+    public FoundcontentViewpager(Activity activity,ArrayList<BooksJson.DataBean> bean){
         mActivity = activity;
-        mRootView = (ImageView) intiView();
+        mRootView = intiView();
     }
 
-    public View intiView(){
-        ImageView imageView = new ImageView(mActivity);
-        imageView.setImageResource(R.drawable.back_left);
-        return imageView;
-    }
+    public abstract View intiView();
+    public abstract void intiData();
 }

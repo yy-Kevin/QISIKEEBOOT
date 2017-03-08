@@ -36,6 +36,8 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         initView();
         initData();
+
+        //设置搜索界面的监听事件。
         TextWatcher textWatcher = new TextWatcher() {
 
             @Override
@@ -69,6 +71,7 @@ public class SearchActivity extends AppCompatActivity {
         et_search = (EditText)findViewById(R.id.et_search);
         tv_cancel = (TextView)findViewById(R.id.tv_cancel);
     }
+
     public void initData() {
         /**
          * 找到搜索标签的控件
