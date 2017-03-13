@@ -48,7 +48,7 @@
             android:layout_marginLeft="20dp"
             android:text="热门搜索"/>
 
-        <com.example.qsk.ebook.view.FlowLayout
+        <com.example.qsk.ebook.view.weight.FlowLayout
 
             android:id="@+id/id_flowlayout"
             android:layout_width="match_parent"
@@ -57,7 +57,7 @@
             android:background="@android:color/transparent"
             android:padding="10dp">
 
-        </com.example.qsk.ebook.view.FlowLayout>
+        </com.example.qsk.ebook.view.weight.FlowLayout>
 
     </LinearLayout>
 

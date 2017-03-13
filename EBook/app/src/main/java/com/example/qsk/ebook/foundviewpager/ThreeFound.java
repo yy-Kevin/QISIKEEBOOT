@@ -15,8 +15,8 @@ import java.util.ArrayList;
  */
 
 public class ThreeFound extends FoundcontentViewpager{
-    public ThreeFound(Activity activity,ArrayList<BooksJson.DataBean> bean) {
-        super(activity,bean);
+    public ThreeFound(Activity activity) {
+        super(activity);
     }
 
     @Override

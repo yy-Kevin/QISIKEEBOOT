@@ -16,8 +16,8 @@ import java.util.ArrayList;
 
 public class TwoFound extends FoundcontentViewpager{
 
-    public TwoFound(Activity activity, ArrayList<BooksJson.DataBean> bean) {
-        super(activity,bean);
+    public TwoFound(Activity activity) {
+        super(activity);
     }
 
     @Override

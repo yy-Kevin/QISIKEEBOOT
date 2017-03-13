@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import com.example.qsk.ebook.MainActivity;
+
+import com.example.qsk.ebook.foundviewpager.FirstFound;
+import com.example.qsk.ebook.view.activity.MainActivity;
 
 import java.lang.ref.WeakReference;
 
@@ -12,7 +14,7 @@ import java.lang.ref.WeakReference;
  * Created by qsk on 2017/3/8.
  */
 
-public class ImageHandler extends Handler {
+public  class ImageHandler extends Handler{
 
     /**
      * 请求更新显示的View。
@@ -34,16 +36,16 @@ public class ImageHandler extends Handler {
     public static final int MSG_PAGE_CHANGED  = 4;
 
     //轮播间隔时间
-    public static final long MSG_DELAY = 1500;
-    public static final String LOG_TAG = "ImageHandle";
+    public static final long MSG_DELAY = 3000;
+    public static final String LOG_TAG = "ImageHandler";
 
     //使用弱引用避免Handler泄露.这里的泛型参数可以不是Activity，也可以是Fragment等
     public WeakReference<MainActivity> weakReference;
+    public FirstFound first;
     public int currentItem = 0;
-    private final MainActivity mActivity;
 
-    public ImageHandler(Activity activity){
-        mActivity = (MainActivity) activity;
+    public ImageHandler(FirstFound first){
+        this.first = first;
     }
 
     @Override
@@ -51,26 +53,26 @@ public class ImageHandler extends Handler {
         super.handleMessage(msg);
         Log.d(LOG_TAG, "receive message " + msg.what);
 
-        if (mActivity==null){
+        if (first.mActivity==null){
             //Activity已经回收，无需再处理UI了
             return ;
         }
         //检查消息队列并移除未发送的消息，这主要是避免在复杂环境下消息出现重复等问题。
-        if (mActivity.handler.hasMessages(MSG_UPDATE_IMAGE)){
-            mActivity.handler.removeMessages(MSG_UPDATE_IMAGE);
+        if (first.imageHandler.hasMessages(MSG_UPDATE_IMAGE)){
+            first.imageHandler.removeMessages(MSG_UPDATE_IMAGE);
         }
         switch (msg.what) {
             case MSG_UPDATE_IMAGE:
                 currentItem++;
-                mActivity.firstFound.viewPager.setCurrentItem(currentItem);
+                first.viewPager.setCurrentItem(currentItem);
                 //准备下次播放
-                mActivity.handler.sendEmptyMessageDelayed(MSG_UPDATE_IMAGE, MSG_DELAY);
+                first.imageHandler.sendEmptyMessageDelayed(MSG_UPDATE_IMAGE, MSG_DELAY);
                 break;
             case MSG_KEEP_SILENT:
                 //只要不发送消息就暂停了
                 break;
             case MSG_BREAK_SILENT:
-                mActivity.handler.sendEmptyMessageDelayed(MSG_UPDATE_IMAGE, MSG_DELAY);
+                first.imageHandler.sendEmptyMessageDelayed(MSG_UPDATE_IMAGE, MSG_DELAY);
                 break;
             case MSG_PAGE_CHANGED:
                 //记录当前的页号，避免播放的时候页面显示不正确。

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:paddingTop="10dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
@@ -8,24 +14,25 @@
         android:layout_height="200dp">
 
         <ImageView
-            android:id="@+id/iv_book"
+            android:id="@+id/iv_book_bokactivity"
             android:layout_marginLeft="10dp"
             android:layout_width="120dp"
             android:layout_height="200dp"
             android:background="@drawable/back_left" />
 
         <TextView
-            android:id="@+id/tv_author_book"
+            android:id="@+id/tv_author_book_bokactivity"
             android:layout_marginTop="20dp"
-            android:layout_toRightOf="@+id/iv_book"
+            android:layout_toRightOf="@+id/iv_book_bokactivity"
             android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="书的名字"/>
 
         <TextView
+            android:id="@+id/tv_name_book_bokactivity"
             android:layout_marginTop="40dp"
-            android:layout_toRightOf="@+id/iv_book"
+            android:layout_toRightOf="@+id/iv_book_bokactivity"
             android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,15 +41,17 @@
         <LinearLayout
             android:layout_marginLeft="20dp"
             android:layout_marginTop="60dp"
-            android:layout_toRightOf="@+id/iv_book"
+            android:layout_toRightOf="@+id/iv_book_bokactivity"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/tv_look_book_bokactivity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="查看"/>
             <TextView
+                android:id="@+id/tv_stop_book_bokactivity"
                 android:paddingLeft="30dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,8 +60,9 @@
 
 
         <Button
+            android:id="@+id/bt_read_book_bookactivity"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/iv_book"
+            android:layout_toRightOf="@+id/iv_book_bokactivity"
             android:gravity="center"
             android:layout_marginLeft="30dp"
             android:layout_marginBottom="20dp"
@@ -68,6 +78,7 @@
         android:layout_height="60dp">
         
         <TextView
+            android:id="@+id/tv_update_book_bookactivity"
             android:padding="6dp"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
@@ -75,6 +86,7 @@
             android:text="跟新至：完结（共51章）"/>
 
         <TextView
+            android:id="@+id/tv_loading_book_bookactivity"
             android:text="下载"
             android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
@@ -82,6 +94,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/tv_finish_book_bookactivity"
             android:text="完结"
             android:layout_alignParentRight="true"
             android:layout_marginRight="60dp"
@@ -89,4 +102,36 @@
             android:layout_height="wrap_content" />
         
     </RelativeLayout>
-</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/description_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="12dip"
+        android:paddingRight="12dip"
+        android:paddingTop="5dip" >
+
+        <TextView
+            android:id="@+id/description_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#444"
+            android:textSize="18dip" >
+        </TextView>
+
+        <ImageView
+            android:id="@+id/expand_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:paddingBottom="5dip"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip"
+            android:paddingTop="5dip"
+            android:src="@drawable/back_left"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

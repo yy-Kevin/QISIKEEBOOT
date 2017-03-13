@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
@@ -17,6 +18,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 }
 
 dependencies {
@@ -24,6 +30,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile 'com.zhy:okhttputils:2.6.2'
     compile 'com.android.support:appcompat-v7:25.2.0'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:design:24.0.0'
@@ -32,6 +39,15 @@ dependencies {
     compile 'com.squareup.okio:okio:1.7.0'
     compile 'com.panxw.imageindicator:library:1.0.2'
     compile 'com.yalantis:phoenix:1.2.3'
-    compile 'com.github.bumptech.glide:glide:3.6.1'
+    //添加JSON
     compile 'com.google.code.gson:gson:2.2.4'
+
+    // 添加Rxjava
+    compile 'io.reactivex:rxjava:1.0.14'
+    compile 'io.reactivex:rxandroid:1.0.1'
+    // 添加Glide
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    // 添加volley
+    compile 'com.github.bumptech.glide:volley-integration:1.2.2'
+    compile 'com.mcxiaoke.volley:library:1.0.5'
 }

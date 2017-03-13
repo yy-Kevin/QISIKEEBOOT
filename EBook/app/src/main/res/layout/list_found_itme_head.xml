@@ -40,12 +40,12 @@
 
     </LinearLayout>
 
-    <com.example.qsk.ebook.view.DicatorViewPager
+    <com.example.qsk.ebook.view.weight.DicatorViewPager
              android:scrollIndicators="right"
                 android:scaleType="fitXY"
-             android:id="@+id/vp_found"
+             android:id="@+id/vp_found_dicator_pager"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content">
-    </com.example.qsk.ebook.view.DicatorViewPager>
+    </com.example.qsk.ebook.view.weight.DicatorViewPager>
 </LinearLayout>
 </FrameLayout>

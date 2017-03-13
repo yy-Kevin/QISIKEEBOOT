@@ -1,4 +1,4 @@
-package com.example.qsk.ebook.view;
+package com.example.qsk.ebook.view.weight;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

@@ -1,4 +1,4 @@
-package com.example.qsk.ebook;
+package com.example.qsk.ebook.view.activity;
 
 
 import android.content.Intent;
@@ -17,12 +17,12 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.qsk.ebook.R;
 import com.example.qsk.ebook.bookview.FoundPager;
 import com.example.qsk.ebook.foundviewpager.FirstFound;
-import com.example.qsk.ebook.fragment.LeftFragMent;
-import com.example.qsk.ebook.fragment.MainFragMent;
+import com.example.qsk.ebook.view.fragment.LeftFragMent;
+import com.example.qsk.ebook.view.fragment.MainFragMent;
 import com.example.qsk.ebook.hander.ImageHandler;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,43 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void ititHander(){
-        handler = new ImageHandler(this);
-        mainFragMent = (MainFragMent) getSupportFragmentManager().findFragmentByTag("MAIN_FRAGMENT");
-        foundPager = (FoundPager) mainFragMent.mPagers.get(0);
-        firstFound = (FirstFound) foundPager.im.get(0);
-
-        firstFound.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                handler.sendMessage(Message.obtain(handler, ImageHandler.MSG_PAGE_CHANGED, position, 0));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                switch (state) {
-                    case ViewPager.SCROLL_STATE_DRAGGING:
-                        handler.sendEmptyMessage(ImageHandler.MSG_KEEP_SILENT);
-                        break;
-                    case ViewPager.SCROLL_STATE_IDLE:
-                        handler.sendEmptyMessageDelayed(ImageHandler.MSG_UPDATE_IMAGE, ImageHandler.MSG_DELAY);
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-        });
-
-        firstFound.viewPager.setCurrentItem(Integer.MAX_VALUE / 2);//默认在中间，使用户看不到边界
-        //开始轮播效果
-        handler.sendEmptyMessageDelayed(ImageHandler.MSG_UPDATE_IMAGE, ImageHandler.MSG_DELAY);
-    }
     private void initView(){
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
         left = (RelativeLayout) findViewById(R.id.left);

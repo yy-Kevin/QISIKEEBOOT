@@ -1,16 +1,9 @@
-package com.example.qsk.ebook.fragment;
+package com.example.qsk.ebook.view.fragment;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -21,21 +14,9 @@ import com.example.qsk.ebook.bookview.BaseBookPager;
 import com.example.qsk.ebook.bookview.BookCasePager;
 import com.example.qsk.ebook.bookview.FoundPager;
 import com.example.qsk.ebook.bookview.MyDePager;
-import com.example.qsk.ebook.gloable.NetUrlGloadle;
-import com.example.qsk.ebook.view.MainViewPager;
+import com.example.qsk.ebook.view.weight.MainViewPager;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.Cache;
-import okhttp3.CacheControl;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Created by qsk on 2017/3/6.
@@ -66,7 +47,7 @@ public class MainFragMent extends BaseFragment {
 
     @Override
     public void initData() {
-
+        Log.i(TAG, "yuyao MainFragment 页面开始加载数据了");
         //开始请求网络了
 //        initInternet();
 
@@ -103,61 +84,12 @@ public class MainFragMent extends BaseFragment {
                 }
             }
         });
-        Log.i(TAG,"yuyao " + "初始化几次");
-//        mPagers.get(0).initData();
-
-        // 设置最新 火热 最近浏览记录的点击事件
-        tv_hot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FoundPager foundPager = (FoundPager) mPagers.get(0);
-                foundPager.lv_found.setCurrentItem(0);
-            }
-        });
-        tv_new.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FoundPager foundPager = (FoundPager) mPagers.get(0);
-                foundPager.lv_found.setCurrentItem(1);
-            }
-        });
-        tv_haha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FoundPager foundPager = (FoundPager) mPagers.get(0);
-                foundPager.lv_found.setCurrentItem(2);
-            }
-        });
 
     }
 
+    //请求网络
     private void initInternet(){
-        Log.i(TAG,"yuyao initIntenet " + "开始请求网络了 。。。。。。。。");
-        File httpCacheDirectory = new File(mActivity.getExternalCacheDir(), "responses");
-        Cache cache = new Cache(httpCacheDirectory, 10 * 1024 * 1024);
 
-        OkHttpClient client = new OkHttpClient.Builder().cache(cache).build();
-
-        //使用Okhttp请求网络
-        Request request = new Request.Builder()
-                .cacheControl(CacheControl.FORCE_CACHE)
-                .cacheControl(new CacheControl.Builder().maxAge(0, TimeUnit.SECONDS).build())
-                .url(NetUrlGloadle.NET_URL)
-                .get()
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i(TAG,"yuyao onFailure " + "请求网络失败了");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String books = response.body().string();
-                    Log.i(TAG,"yuyao onResponse 请求网络成功 1111=" + books);
-            }
-        });
     }
 
     // 主页面的adapter，发现，书柜，我的。

@@ -5,34 +5,39 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/iv_bookcase_item"
+        android:padding="4dp"
+        android:layout_marginLeft="6dp"
+        android:id="@+id/iv_bookcase_item_book"
         android:src="@drawable/back_left"
         android:layout_width="120dp"
         android:layout_height="200dp" />
 
     <LinearLayout
+        android:paddingTop="4dp"
         android:orientation="vertical"
         android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:paddingTop="4dp"
-            android:id="@+id/tv_title"
+            android:paddingTop="8dp"
+            android:textSize="16dp"
+            android:textColor="#000"
+            android:id="@+id/tv_title_itme_book"
             android:text="The Algorithms For Love"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
             android:paddingTop="4dp"
-            android:id="@+id/tv_author"
+            android:id="@+id/tv_author_item_book"
             android:text="by Dream Templ"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:paddingTop="4dp"
-            android:id="@+id/tv_content"
+            android:paddingTop="12dp"
+            android:id="@+id/tv_content_item_book"
             android:text="by Dream Templ asfasdf adfadsf adfads dsfad asedfad sdf asasd  asdf asd asdf asdf asdf asdf asdf asdf sdaf sadf f
               adsa adfa dfsaf fda sdfa sfd asfd asdf asdf asdf asdf fa sdf asd sdf asdfsd f af asdf dasf dsaf sdaf "
             android:lines="3"
@@ -40,17 +45,21 @@
             android:layout_height="wrap_content" />
         
         <LinearLayout
+            android:paddingTop="22dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             
             <TextView
+                android:id="@+id/tv_found_item_book"
                 android:drawableLeft="@drawable/back_left"
                 android:text="发现"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
+                android:paddingLeft="20dp"
+                android:id="@+id/tv_like_item_book"
                 android:drawableLeft="@drawable/back_left"
                 android:text="点赞"
                 android:layout_width="wrap_content"

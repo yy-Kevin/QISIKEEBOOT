@@ -1,7 +1,6 @@
-package com.example.qsk.ebook;
+package com.example.qsk.ebook.view.activity;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,10 +8,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.view.animation.Transformation;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.qsk.ebook.view.FlowLayout;
+import com.example.qsk.ebook.R;
+import com.example.qsk.ebook.view.weight.FlowLayout;
 
 /**
  * Created by qsk on 2017/3/7.
@@ -85,7 +88,7 @@ public class SearchActivity extends AppCompatActivity {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Log.i(TAG,"initData" + "被点击了");
                 }
             });
             mFlowLayout.addView(tv);//添加到父View

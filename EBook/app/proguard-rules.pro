@@ -15,3 +15,13 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-keep class com.bumptech.glide.integration.okhttp.OkHttpGlideModule
+#or
+-keep public class * implements com.bumptech.glide.module.GlideModule
+
+-keep class com.bumptech.glide.integration.okhttp.OkHttpGlideModule
+#or
+-keep public class * implements com.bumptech.glide.module.GlideModule
+
+-keepnames class * com.example.jianglei.glidedemo.GlideModelConfig

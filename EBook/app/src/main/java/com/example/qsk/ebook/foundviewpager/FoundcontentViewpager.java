@@ -17,8 +17,11 @@ public abstract class FoundcontentViewpager {
 
     public Activity mActivity;
     public View mRootView;
+    public ArrayList<BooksJson.DataBean> been;
 
-    public FoundcontentViewpager(Activity activity,ArrayList<BooksJson.DataBean> bean){
+
+    public FoundcontentViewpager(Activity activity){
+
         mActivity = activity;
         mRootView = intiView();
     }

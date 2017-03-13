@@ -1,4 +1,4 @@
-package com.example.qsk.ebook.fragment;
+package com.example.qsk.ebook.view.fragment;
 
 import android.support.v4.app.Fragment;
 
