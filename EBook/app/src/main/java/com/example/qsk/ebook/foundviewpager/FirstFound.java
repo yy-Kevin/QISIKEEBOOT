@@ -25,12 +25,14 @@ import com.example.qsk.ebook.R;
 import com.example.qsk.ebook.bean.Books;
 import com.example.qsk.ebook.bean.BooksJson;
 import com.example.qsk.ebook.gloable.NetUrlGloadle;
+import com.example.qsk.ebook.view.weight.RefreshLayout;
 import com.example.qsk.ebook.view.weight.TouchSlopView;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import okhttp3.Cache;
 import okhttp3.Call;
@@ -59,12 +61,13 @@ public class FirstFound extends FoundcontentViewpager {
     private View view_viewpager;
     private ArrayList<ImageView> image_viewpager;
     private MainActivity mainActivity;
-    private TouchSlopView mSwipeLayout;
+    private RefreshLayout mSwipeLayout;
     private ArrayList<BooksJson.DataBean> dataList;
     private ImageView imageView;
 
     public ImageHandler imageHandler = new ImageHandler(this){};
-//    private Handler handler = new Handler() {
+    private FirstFoundAdapter firstFoundAdapter;
+    //    private Handler handler = new Handler() {
 //        @Override
 //        //当有消息发送出来的时候就执行Handler的这个方法
 //        public void handleMessage(Message msg) {
@@ -102,7 +105,7 @@ public class FirstFound extends FoundcontentViewpager {
     public View intiView() {
         View view = View.inflate(mActivity, R.layout.listview_found_first_item, null);
         lv_listview_first = (ListView) view.findViewById(R.id.lv_listview_first);
-        mSwipeLayout = (TouchSlopView) view.findViewById(R.id.swipe_container);
+        mSwipeLayout = (RefreshLayout) view.findViewById(R.id.swipe_container);
         //轮播轮的跟布局
         view_viewpager = View.inflate(mActivity, R.layout.viewpager_found_first_item, null);
         viewPager = (ViewPager) view_viewpager.findViewById(R.id.view_found_first_item);
@@ -142,7 +145,8 @@ public class FirstFound extends FoundcontentViewpager {
         initInternet();
 
         //轮播图的ViewPager
-        viewPager.setAdapter(new FirstFoundAdapter());
+        firstFoundAdapter = new FirstFoundAdapter();
+        viewPager.setAdapter(firstFoundAdapter);
 
         //给listview设置点击事件
         lv_listview_first.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -151,12 +155,28 @@ public class FirstFound extends FoundcontentViewpager {
 
                 Log.i(TAG,"ListView的第 " + (position - 1) + "个条目被点击了");
                 Intent intent = new Intent(mainActivity, BookAcitvity.class);
-                //通过，intent发送点击书本的详细信息 可以是链接
+                //通过，intent发送点击书本的详细信息 可以是链接                mActivity.startActivity(intent);
+
                 intent.putExtra("book_url",dataList.get(position - 1).getLinks().getSelf());
-                mActivity.startActivity(intent);
             }
         });
 
+
+
+        // 设置下拉刷新的回调
+        setSwipeLayout();
+
+    }
+
+
+
+
+
+    /**
+     * 设置View
+     *
+     */
+    private void setViewPager(){
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -188,14 +208,18 @@ public class FirstFound extends FoundcontentViewpager {
         viewPager.setCurrentItem(image_viewpager.size()*10000);//默认在中间，使用户看不到边界
         //开始轮播效果
         imageHandler.sendEmptyMessageDelayed(imageHandler.MSG_UPDATE_IMAGE, imageHandler.MSG_DELAY);
+    }
+    /**
+     * 初始化下拉刷新，和设置下拉刷新的回调
+     *
+     */
+    private void setSwipeLayout(){
 
         // 给下拉刷新设置回调
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                new FoundPager(mActivity).initData();
 
-//                books = new ArrayList<Books>();
                 initInternet();
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -203,13 +227,33 @@ public class FirstFound extends FoundcontentViewpager {
                         Log.i(TAG,"下拉刷新成功");
                         // 停止刷新
                         mSwipeLayout.setRefreshing(false);
+                        books.add(new Books("hah","haha","haha","haha"));
+
+                        firstFoundAdapter.notifyDataSetChanged();
+
                     }
                 }, 2000); // 2秒后发送消息，停止刷新
             }
         });
+
+        //        mSwipeLayout.setOnLoadListener(new RefreshLayout.OnLoadListener() {
+//            @Override
+//            public void onLoad() {
+//                books.add(new Books("hah","haha","haha","haha"));
+//
+//                firstFoundAdapter.notifyDataSetChanged();
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // 更新数据  更新完后调用该方法结束刷新
+//                        mSwipeLayout.setLoading(false);
+//
+//
+//                    }
+//                }, 2000); // 2秒后发送消息，停止刷新
+//            }
+//        });
     }
-
-
     /**
      * viewpager的adapter  实现了无限轮播的效果
      *
@@ -364,6 +408,18 @@ public class FirstFound extends FoundcontentViewpager {
                 });
     }
 
+    /**
+     * @param date 请求网络成功的数据
+     *
+     * 使用JSON来解析数据
+     */
+    private void GsonForNet(String date) {
+        Log.i(TAG, "yuyao , 使用JSON开始解析数据了");
+        Gson gson = new Gson();
+        BooksJson booksjson = gson.fromJson(date, BooksJson.class);
+        dataList = (ArrayList<BooksJson.DataBean>) booksjson.getData();
+    }
+
     public void initRxJava(){
 
         /**
@@ -398,16 +454,4 @@ public class FirstFound extends FoundcontentViewpager {
         observable.subscribe(subscriber);
     }
 
-
-    /**
-     * @param date 请求网络成功的数据
-     *
-     * 使用JSON来解析数据
-     */
-    private void GsonForNet(String date) {
-        Log.i(TAG, "yuyao , 使用JSON开始解析数据了");
-        Gson gson = new Gson();
-        BooksJson booksjson = gson.fromJson(date, BooksJson.class);
-        dataList = (ArrayList<BooksJson.DataBean>) booksjson.getData();
-    }
 }
